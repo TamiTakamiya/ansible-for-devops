@@ -1,10 +1,10 @@
 ---
 - hosts: nodejs-api
-  become: yes
+  become: true
 
   vars:
     nodejs_install_npm_user: root
-    npm_config_prefix: "/usr"
+    npm_config_prefix: /usr
     nodejs_npm_global_packages:
       - forever
     firewall_allowed_tcp_ports:

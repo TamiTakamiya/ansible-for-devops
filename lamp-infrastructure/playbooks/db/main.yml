@@ -1,6 +1,6 @@
 ---
 - hosts: lamp_db
-  become: yes
+  become: true
 
   vars_files:
     - vars.yml

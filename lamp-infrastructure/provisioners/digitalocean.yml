@@ -5,33 +5,33 @@
 
   vars:
     droplets:
-      - { name: a4d.lamp.varnish, group: "lamp_varnish" }
-      - { name: a4d.lamp.www.1, group: "lamp_www" }
-      - { name: a4d.lamp.www.2, group: "lamp_www" }
-      - { name: a4d.lamp.db.1, group: "lamp_db" }
-      - { name: a4d.lamp.db.2, group: "lamp_db" }
-      - { name: a4d.lamp.memcached, group: "lamp_memcached" }
+      - { name: a4d.lamp.varnish, group: lamp_varnish }
+      - { name: a4d.lamp.www.1, group: lamp_www }
+      - { name: a4d.lamp.www.2, group: lamp_www }
+      - { name: a4d.lamp.db.1, group: lamp_db }
+      - { name: a4d.lamp.db.2, group: lamp_db }
+      - { name: a4d.lamp.memcached, group: lamp_memcached }
 
   tasks:
     - name: Provision DigitalOcean droplets.
       digital_ocean_droplet:
         state: "{{ item.state | default('present') }}"
         name: "{{ item.name }}"
-        private_networking: yes
+        private_networking: true
         size: "{{ item.size | default('1gb') }}"
         image: "{{ item.image | default('centos-7-x64') }}"
         region: "{{ item.region | default('nyc3') }}"
         # Customize this default for your account.
         ssh_keys:
           - "{{ item.ssh_key | default('138954') }}"
-        unique_name: yes
+        unique_name: true
       register: created_droplets
       with_items: "{{ droplets }}"
 
     - name: Add DigitalOcean hosts to inventory groups.
       add_host:
         name: "{{ item.1.data.ip_address }}"
-        groups: "do,{{ droplets[item.0].group }},{{ item.1.data.droplet.name }}"
+        groups: do,{{ droplets[item.0].group }},{{ item.1.data.droplet.name }}
         # You can dynamically add inventory variables per-host.
         ansible_user: root
         mysql_replication_role: >-

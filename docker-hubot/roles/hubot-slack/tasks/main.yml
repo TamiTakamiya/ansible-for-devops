@@ -8,7 +8,7 @@
   npm:
     name: "{{ item }}"
     state: present
-    global: yes
+    global: true
   with_items:
     - yo
     - generator-hubot
@@ -16,7 +16,7 @@
 - name: Ensure hubot user exists.
   user:
     name: hubot
-    create_home: yes
+    create_home: true
     home: "{{ hubot_home }}"
 
 - name: Generate hubot.
@@ -28,7 +28,7 @@
     --adapter=slack
     --defaults
     chdir={{ hubot_home }}
-  become: yes
+  become: true
   become_user: hubot
 
 - name: Remove certain scripts from external-scripts.json.
@@ -37,9 +37,9 @@
     regexp: "{{ item }}"
     state: absent
   with_items:
-    - 'redis-brain'
-    - 'heroku'
-  become: yes
+    - redis-brain
+    - heroku
+  become: true
   become_user: hubot
 
 - name: Remove the hubot-scripts.json file.

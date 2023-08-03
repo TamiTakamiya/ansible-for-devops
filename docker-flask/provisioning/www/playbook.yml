@@ -4,7 +4,7 @@
 
   tasks:
     - name: Get host IP address.
-      shell: "/sbin/ip route | awk '/default/ { print $3 }'"
+      shell: /sbin/ip route | awk '/default/ { print $3 }'
       register: host_ip
       changed_when: false
 
@@ -16,10 +16,10 @@
       template:
         src: /etc/ansible/index.py.j2
         dest: /opt/www/index.py
-        mode: 0755
+        mode: "0755"
 
     - name: Copy Flask templates into place.
       copy:
         src: /etc/ansible/templates
         dest: /opt/www
-        mode: 0755
+        mode: "0755"

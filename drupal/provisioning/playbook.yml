@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  become: yes
+  become: true
 
   vars_files:
     - vars.yml
@@ -24,7 +24,7 @@
     - name: Add ondrej repository for later versions of PHP.
       apt_repository: repo='ppa:ondrej/php' update_cache=yes
 
-    - name: "Install Apache, MySQL, PHP, and other dependencies."
+    - name: Install Apache, MySQL, PHP, and other dependencies.
       apt:
         state: present
         name:
@@ -53,8 +53,8 @@
     - name: Disable the firewall (since this is for local dev only).
       service: name=ufw state=stopped
 
-    - name: "Start Apache, MySQL, and PHP."
-      service: "name={{ item }} state=started enabled=yes"
+    - name: Start Apache, MySQL, and PHP.
+      service: name={{ item }} state=started enabled=yes
       with_items:
         - apache2
         - mysql
@@ -65,11 +65,11 @@
 
     - name: Add Apache virtualhost for Drupal.
       template:
-        src: "templates/drupal.test.conf.j2"
-        dest: "/etc/apache2/sites-available/{{ domain }}.test.conf"
+        src: templates/drupal.test.conf.j2
+        dest: /etc/apache2/sites-available/{{ domain }}.test.conf
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       notify: restart apache
 
     - name: Enable the Drupal site.
@@ -86,14 +86,14 @@
 
     - name: Adjust OpCache memory setting.
       lineinfile:
-        dest: "/etc/php/8.2/apache2/conf.d/10-opcache.ini"
-        regexp: "^opcache.memory_consumption"
-        line: "opcache.memory_consumption = 96"
+        dest: /etc/php/8.2/apache2/conf.d/10-opcache.ini
+        regexp: ^opcache.memory_consumption
+        line: opcache.memory_consumption = 96
         state: present
       notify: restart apache
 
     - name: Create a MySQL database for Drupal.
-      mysql_db: "db={{ domain }} state=present"
+      mysql_db: db={{ domain }} state=present
 
     - name: Create a MySQL user for Drupal.
       mysql_user:
@@ -107,7 +107,7 @@
       get_url:
         url: https://getcomposer.org/installer
         dest: /tmp/composer-installer.php
-        mode: 0755
+        mode: "0755"
 
     - name: Run Composer installer.
       command: >

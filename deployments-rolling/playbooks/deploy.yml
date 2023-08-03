@@ -1,7 +1,7 @@
 ---
 - hosts: nodejs-api
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
 
   vars_files:
     - vars.yml
@@ -17,15 +17,15 @@
       notify: restart forever apps
 
     - name: Stop all running instances of the app.
-      command: "forever stopall"
+      command: forever stopall
       when: app_updated.changed
 
     - name: Ensure Node.js API app dependencies are present.
-      npm: "path={{ app_directory }}"
+      npm: path={{ app_directory }}
       when: app_updated.changed
 
     - name: Run Node.js API app tests.
-      command: "npm test chdir={{ app_directory }}"
+      command: npm test chdir={{ app_directory }}
       when: app_updated.changed
 
     - name: Get list of all running Node.js apps.
@@ -34,15 +34,15 @@
       changed_when: false
 
     - name: Ensure Node.js API app is started.
-      command: "forever start {{ app_directory }}/app.js"
-      when: "forever_list.stdout.find('app.js') == -1"
+      command: forever start {{ app_directory }}/app.js
+      when: forever_list.stdout.find('app.js') == -1
 
     - name: Add cron entry to start Node.js API app on reboot.
       cron:
-        name: "Start Node.js API app"
+        name: Start Node.js API app
         special_time: reboot
-        job: "forever start {{ app_directory }}/app.js"
+        job: forever start {{ app_directory }}/app.js
 
   handlers:
     - name: restart forever apps
-      command: "forever restartall"
+      command: forever restartall

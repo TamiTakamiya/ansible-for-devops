@@ -1,12 +1,12 @@
 ---
 name: CI
-'on':
+"on":
   pull_request:
   push:
     branches:
       - master
   schedule:
-    - cron: "10 2 * * 0"
+    - cron: 10 2 * * 0
 
 jobs:
   scripts:
@@ -24,7 +24,7 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: 3.x
 
       - name: Run test script.
         run: tests/${{ matrix.test_script }}.sh
@@ -128,7 +128,7 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: 3.x
 
       - name: Download test shim.
         run: |

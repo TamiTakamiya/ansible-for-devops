@@ -1,13 +1,13 @@
 ---
 - hosts: app
-  become: yes
+  become: true
   serial: 1
 
   pre_tasks:
     - name: Disable the backend server in HAProxy.
       haproxy:
         state: disabled
-        host: '{{ inventory_hostname }}'
+        host: "{{ inventory_hostname }}"
         socket: /var/lib/haproxy/stats
         backend: habackend
       delegate_to: "{{ item }}"
@@ -21,7 +21,7 @@
   post_tasks:
     - name: Wait for backend to come back up.
       wait_for:
-        host: '{{ inventory_hostname }}'
+        host: "{{ inventory_hostname }}"
         port: 80
         state: started
         timeout: 60
@@ -29,7 +29,7 @@
     - name: Enable the backend server in HAProxy.
       haproxy:
         state: enabled
-        host: '{{ inventory_hostname }}'
+        host: "{{ inventory_hostname }}"
         socket: /var/lib/haproxy/stats
         backend: habackend
       delegate_to: "{{ item }}"
