@@ -1,6 +1,6 @@
 ---
 - hosts: logs
-  gather_facts: yes
+  gather_facts: true
 
   vars_files:
     - vars/main.yml

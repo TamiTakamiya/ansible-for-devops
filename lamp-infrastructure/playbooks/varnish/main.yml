@@ -1,6 +1,6 @@
 ---
 - hosts: lamp_varnish
-  become: yes
+  become: true
 
   vars_files:
     - vars.yml
@@ -13,6 +13,6 @@
   tasks:
     - name: Copy Varnish default.vcl.
       template:
-        src: "templates/default.vcl.j2"
-        dest: "/etc/varnish/default.vcl"
+        src: templates/default.vcl.j2
+        dest: /etc/varnish/default.vcl
       notify: restart varnish

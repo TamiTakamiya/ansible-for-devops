@@ -9,6 +9,6 @@ hostnames:
 
 keyed_groups:
   - key: tags.inventory_group
-    separator: ''
+    separator: ""
   - key: tags.Application
-    separator: ''
+    separator: ""

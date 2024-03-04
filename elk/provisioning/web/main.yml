@@ -1,6 +1,6 @@
 ---
 - hosts: web
-  gather_facts: yes
+  gather_facts: true
 
   vars_files:
     - vars/main.yml
@@ -20,12 +20,12 @@
         dest: /etc/nginx/sites-enabled/example.conf
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       notify: restart nginx
 
     - name: Ensure logs server is in hosts file.
       lineinfile:
         dest: /etc/hosts
-        regexp: '.*logs\.test$'
-        line: "192.168.56.90 logs.test"
+        regexp: .*logs\.test$
+        line: 192.168.56.90 logs.test
         state: present
