@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  become: yes
+  become: true
 
   vars_files:
     - vars.yml
@@ -27,20 +27,20 @@
         dest: "{{ app_directory }}/config/secrets.yml"
         owner: "{{ app_user }}"
         group: "{{ app_user }}"
-        mode: 0664
+        mode: "0664"
       notify: restart nginx
 
     - name: Install required dependencies with bundler.
-      command: "bundle install --path vendor/bundle chdir={{ app_directory }}"
+      command: bundle install --path vendor/bundle chdir={{ app_directory }}
       when: app_updated.changed == true
       notify: restart nginx
 
     - name: Check if database exists.
-      stat: "path={{ app_directory }}/db/{{ app_environment.RAILS_ENV }}.sqlite3"
+      stat: path={{ app_directory }}/db/{{ app_environment.RAILS_ENV }}.sqlite3
       register: app_db_exists
 
     - name: Create database.
-      command: "bundle exec rake db:create chdir={{ app_directory }}"
+      command: bundle exec rake db:create chdir={{ app_directory }}
       when: app_db_exists.stat.exists == false
       notify: restart nginx
 
@@ -59,5 +59,5 @@
         state: directory
         owner: "{{ app_user }}"
         group: "{{ app_user }}"
-        recurse: yes
+        recurse: true
       notify: restart nginx

@@ -10,23 +10,23 @@
 
     instances:
       - name: a4d.lamp.varnish
-        group: "lamp_varnish"
-        security_group: ["default", "a4d_lamp_http"]
+        group: lamp_varnish
+        security_group: [default, a4d_lamp_http]
       - name: a4d.lamp.www.1
-        group: "lamp_www"
-        security_group: ["default", "a4d_lamp_http"]
+        group: lamp_www
+        security_group: [default, a4d_lamp_http]
       - name: a4d.lamp.www.2
-        group: "lamp_www"
-        security_group: ["default", "a4d_lamp_http"]
+        group: lamp_www
+        security_group: [default, a4d_lamp_http]
       - name: a4d.lamp.db.1
-        group: "lamp_db"
-        security_group: ["default", "a4d_lamp_db"]
+        group: lamp_db
+        security_group: [default, a4d_lamp_db]
       - name: a4d.lamp.db.2
-        group: "lamp_db"
-        security_group: ["default", "a4d_lamp_db"]
+        group: lamp_db
+        security_group: [default, a4d_lamp_db]
       - name: a4d.lamp.memcached
-        group: "lamp_memcached"
-        security_group: ["default", "a4d_lamp_memcached"]
+        group: lamp_memcached
+        security_group: [default, a4d_lamp_memcached]
 
     security_groups:
       - name: a4d_lamp_http
@@ -34,11 +34,11 @@
           - proto: tcp
             from_port: 80
             to_port: 80
-            cidr_ip: 0.0.0.0/0
+            cidr_ip: "0.0.0.0/0"
           - proto: tcp
             from_port: 22
             to_port: 22
-            cidr_ip: 0.0.0.0/0
+            cidr_ip: "0.0.0.0/0"
         rules_egress: []
 
       - name: a4d_lamp_db
@@ -46,11 +46,11 @@
           - proto: tcp
             from_port: 3306
             to_port: 3306
-            cidr_ip: 0.0.0.0/0
+            cidr_ip: "0.0.0.0/0"
           - proto: tcp
             from_port: 22
             to_port: 22
-            cidr_ip: 0.0.0.0/0
+            cidr_ip: "0.0.0.0/0"
         rules_egress: []
 
       - name: a4d_lamp_memcached
@@ -58,11 +58,11 @@
           - proto: tcp
             from_port: 11211
             to_port: 11211
-            cidr_ip: 0.0.0.0/0
+            cidr_ip: "0.0.0.0/0"
           - proto: tcp
             from_port: 22
             to_port: 22
-            cidr_ip: 0.0.0.0/0
+            cidr_ip: "0.0.0.0/0"
         rules_egress: []
 
   tasks:
@@ -88,7 +88,7 @@
         group: "{{ item.security_group | default('') }}"
         instance_type: "{{ item.type | default('t2.micro')}}"
         image: "{{ aws_ec2_ami }}"
-        wait: yes
+        wait: true
         wait_timeout: 500
         exact_count: 1
         count_tag:
@@ -101,7 +101,7 @@
     - name: Add EC2 instances to inventory groups.
       add_host:
         name: "{{ item.1.tagged_instances.0.public_ip }}"
-        groups: "aws,{{ item.1.item.group }},{{ item.1.item.name }}"
+        groups: aws,{{ item.1.item.group }},{{ item.1.item.name }}
         # You can dynamically add inventory variables per-host.
         ansible_user: centos
         host_key_checking: false

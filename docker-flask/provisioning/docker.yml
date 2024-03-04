@@ -26,7 +26,7 @@
     name: www
     state: started
     command: python3 /opt/www/index.py
-    ports: "80:80"
+    ports: 80:80
 
 - name: Run a MySQL container.
   docker_container:
@@ -34,7 +34,7 @@
     name: db
     state: started
     volumes_from: data
-    ports: "3306:3306"
+    ports: 3306:3306
     env:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: flask

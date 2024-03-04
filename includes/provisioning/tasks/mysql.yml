@@ -1,6 +1,6 @@
 ---
 - name: Create a MySQL database for Drupal.
-  mysql_db: "db={{ domain }} state=present"
+  mysql_db: db={{ domain }} state=present
 
 - name: Create a MySQL user for Drupal.
   mysql_user:

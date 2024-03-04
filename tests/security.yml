@@ -25,8 +25,8 @@
       copy:
         content: ""
         dest: /var/log/messages
-        force: no
-        mode: 0600
+        force: false
+        mode: "0600"
 
 # Security test.
 - import_playbook: ../security/main.yml

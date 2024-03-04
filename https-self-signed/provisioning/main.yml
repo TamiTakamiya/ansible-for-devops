@@ -28,11 +28,11 @@
       copy:
         src: files/index.html
         dest: "{{ nginx_docroot }}/index.html"
-        mode: 0755
+        mode: "0755"
 
     - name: Copy Nginx server configuration in place.
       template:
         src: templates/https.test.conf.j2
         dest: /etc/nginx/sites-enabled/https.test.conf
-        mode: 0644
+        mode: "0644"
       notify: restart nginx

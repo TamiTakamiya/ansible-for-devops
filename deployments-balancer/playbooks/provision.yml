@@ -1,7 +1,7 @@
 ---
 - name: Firewall configuration.
   hosts: all
-  become: yes
+  become: true
 
   vars:
     firewall_allowed_tcp_ports:
@@ -17,7 +17,7 @@
 
 - name: HAProxy Load Balancer setup.
   hosts: balancer
-  become: yes
+  become: true
 
   vars:
     haproxy_backend_servers:
@@ -31,7 +31,7 @@
 
 - name: Apache webserver setup.
   hosts: app
-  become: yes
+  become: true
 
   roles:
     - geerlingguy.apache

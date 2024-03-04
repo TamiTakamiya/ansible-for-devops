@@ -11,7 +11,7 @@ app_environment:
   RAILS_ENV: production
 
 # Variables for Passenger and Nginx.
-passenger_server_name: 0.0.0.0
+passenger_server_name: "0.0.0.0"
 passenger_app_root: /opt/demo-rails-app/public
 passenger_app_env: production
 passenger_ruby: /usr/local/bin/ruby

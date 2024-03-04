@@ -22,14 +22,14 @@
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
         state: present
-        validate: 'sshd -t -f %s'
+        validate: sshd -t -f %s
       with_items:
-        - regexp: "^PasswordAuthentication"
-          line: "PasswordAuthentication no"
-        - regexp: "^PermitRootLogin"
-          line: "PermitRootLogin no"
-        - regexp: "^Port"
-          line: "Port 2849"
+        - regexp: ^PasswordAuthentication
+          line: PasswordAuthentication no
+        - regexp: ^PermitRootLogin
+          line: PermitRootLogin no
+        - regexp: ^Port
+          line: Port 2849
       notify: restart ssh
 
     # User account configuration.
@@ -42,10 +42,10 @@
     - name: Add sudo rights for deployment user.
       lineinfile:
         dest: /etc/sudoers
-        regexp: '^johndoe'
-        line: 'johndoe ALL=(ALL) NOPASSWD: ALL'
+        regexp: ^johndoe
+        line: "johndoe ALL=(ALL) NOPASSWD: ALL"
         state: present
-        validate: 'visudo -cf %s'
+        validate: visudo -cf %s
 
     # Remove unused software, open only required ports.
     - name: Remove unused packages.
@@ -61,7 +61,7 @@
         path: /var/log/messages
         owner: root
         group: root
-        mode: 0600
+        mode: "0600"
 
     # Automating updates for RHEL systems.
     - name: Install dnf-automatic.
@@ -73,7 +73,7 @@
       service:
         name: dnf-automatic-install.timer
         state: started
-        enabled: yes
+        enabled: true
 
     # Automating updates for Debian systems.
     - name: Install unattended upgrades package.
@@ -84,11 +84,11 @@
 
     - name: Copy unattended-upgrades configuration files in place.
       template:
-        src: "../templates/{{ item }}.j2"
-        dest: "/etc/apt/apt.conf.d/{{ item }}"
+        src: ../templates/{{ item }}.j2
+        dest: /etc/apt/apt.conf.d/{{ item }}
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       with_items:
         - 20auto-upgrades
         - 50unattended-upgrades
@@ -105,12 +105,12 @@
         state: "{{ item.state }}"
         port: "{{ item.port }}"
         zone: external
-        immediate: yes
-        permanent: yes
+        immediate: true
+        permanent: true
       with_items:
-        - { state: 'enabled', port: '22/tcp' }
-        - { state: 'enabled', port: '80/tcp' }
-        - { state: 'enabled', port: '123/udp' }
+        - { state: enabled, port: 22/tcp }
+        - { state: enabled, port: 80/tcp }
+        - { state: enabled, port: 123/udp }
 
     # Monitor logins and block suspect IP addresses.
     - name: Ensure EPEL repo is present.
@@ -136,7 +136,7 @@
       service:
         name: fail2ban
         state: started
-        enabled: yes
+        enabled: true
 
     # Use SELinux (Security-Enhanced Linux).
     - name: Install Python SELinux library.
@@ -152,6 +152,6 @@
     - name: Ensure httpd can connect to the network.
       seboolean:
         name: httpd_can_network_connect
-        state: yes
-        persistent: yes
+        state: true
+        persistent: true
       when: ansible_selinux.status == 'enabled'
